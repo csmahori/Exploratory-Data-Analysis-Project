@@ -1,0 +1,8 @@
+sub6<-subset(NEI,NEI$SCC %in% sub4$SCC & fips == "06037")
+par(mfrow=c(1,2))
+with(sub5,plot(year,Emissions))
+title(main="MotorVehicle Emission-Baltimore city",cex.main=0.8)
+with(sub6,plot(year,Emissions))
+title(main="MotorVehicle Emission-Los Angeles city",cex.main=0.8)
+dev.copy(png,file="plot6.png")
+dev.off()
