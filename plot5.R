@@ -1,5 +1,12 @@
+NEI<-readRDS("summarySCC_PM25.rds")
+SCC<-readRDS("Source_Classification_Code.rds")
 table(SCC$EI.Sector)
-sub4<-SCC[grep("[Vv]ehicles",SCC$EI.Sector),]
-str(sub4)
-sub5<-subset(NEI,NEI$SCC %in% sub4$SCC & fips == "24510")
-qplot(year,Emissions,data=sub5)
+sub3<-SCC[grep("[Mm]otor|[Vv]ehicles",SCC$SCC.Level.Three),]
+sub31<-merge(NEI,sub3,by="SCC")
+sub32<-filter(sub31,fips="24510")
+sub32<-mutate(sub32,year=as.factor(year))
+sub33<-group_by(sub32,year,SCC.Level.Three)
+sub33<-summarize(sub33,total_emissions=sum(Emissions,na.rm=TRUE))
+ggplot(sub33,aes(year,total_emissions,group=SCC.Level.Three,col=SCC.Level.Three))+geom_line(size=1.25)+scale_y_log10()
+dev.copy(png,file="plot5.png")
+dev.off()
